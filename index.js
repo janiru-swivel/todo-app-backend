@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import route from "./routes/userRoute.js";
+import route from "./routes/todoRoute.js";
 import cors from "cors";
 
 const app = express();
@@ -18,7 +18,7 @@ mongoose
   .then(() => {
     console.log("DB connected successfully.");
     app.listen(PORT, () => {
-      console.log(`Server is running on port :${PORT} `);
+      console.log(`Server is running on port: ${PORT}`);
     });
   })
   .catch((error) => console.log(error));
