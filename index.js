@@ -6,6 +6,7 @@ import cors from "cors";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import route from "./routes/todoRoute.js";
+import Logger from "./config/logger.js";
 
 const app = express();
 
@@ -18,6 +19,15 @@ const swaggerDocument = YAML.load("./swagger.yaml");
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
+
+// Add HTTP request logging middleware
+app.use((req, res, next) => {
+  Logger.http(`${req.method} ${req.url}`, {
+    ip: req.ip,
+    userAgent: req.get("user-agent"),
+  });
+  next();
+});
 
 // Swagger UI setup
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -33,14 +43,29 @@ app.use("/api", route);
 mongoose
   .connect(MONGOURL)
   .then(() => {
-    console.log("DB connected successfully.");
+    Logger.info("MongoDB connected successfully");
     app.listen(PORT, () => {
-      console.log(`Server is running on port: ${PORT}`);
-      console.log(
+      Logger.info(`Server started on port ${PORT}`);
+      Logger.info(
         `API Documentation available at http://localhost:${PORT}/api-docs`
       );
     });
   })
-  .catch((error) => console.log(error));
+  .catch((error) => {
+    Logger.error("Failed to connect to MongoDB", { error: error.message });
+    process.exit(1);
+  });
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (error) => {
+  Logger.error("Uncaught Exception", { error: error.message });
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (error) => {
+  Logger.error("Unhandled Promise Rejection", { error: error.message });
+  process.exit(1);
+});
 
 export default app;
