@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
-import route from "./routes/todoRoute.js";
+import todoRoute from "./routes/todoRoute.js";
+import authRoute from "./routes/authRoute.js";
 import Logger from "./config/logger.js";
 
 const app = express();
@@ -37,7 +38,8 @@ const PORT = process.env.PORT || 7000;
 const MONGOURL = process.env.MONGO_URL;
 
 // Routes
-app.use("/api", route);
+app.use("/api/auth", authRoute);
+app.use("/api", todoRoute);
 
 // MongoDB connection and server startup
 mongoose
