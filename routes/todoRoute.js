@@ -10,7 +10,6 @@ import {
 
 const router = express.Router();
 
-// Protect all todo routes with authentication
 router.use(verifyToken);
 
 router.post("/todo", createTodo);

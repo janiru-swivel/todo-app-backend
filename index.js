@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
-import todoRoute from "./routes/todoRoute.js"; // Changed from todoRoutes to todoRoute
-import authRoute from "./routes/authRoute.js"; // Changed from authRoutes to authRoute
+import todoRoute from "./routes/todoRoute.js";
+import authRoute from "./routes/authRoute.js";
 import Logger from "./config/logger.js";
 
 const app = express();
